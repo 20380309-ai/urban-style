@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Método de Pago - Gorra</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .badge-stock {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      background-color: #e3f2fd;
+      color: #1976d2;
+    }
+
+    .badge-stock.agotado {
+      background-color: #ffebee;
+      color: #d32f2f;
+    }
+
+    .btn-pago {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background-color: #00b09b;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-pago:hover {
+      background-color: #008a7a;
+    }
+
+    .btn-pago:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    #toast {
+      visibility: hidden;
+      min-width: 200px;
+      background-color: #2e7d32;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 12px;
+      margin-top: 15px;
+    }
+
+    #toast.show {
+      visibility: visible;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Compra de Gorra</h2>
+    
+    <!-- Contador de Stock -->
+    <div id="stock-disponible" class="badge-stock">Cargando stock...</div>
+
+    <!-- Botón de Pago -->
+    <button id="btn-confirmar" class="btn-pago" onclick="procesarCompra()">Confirmar pago</button>
+
+    <!-- Notificación -->
+    <div id="toast"></div>
+  </div>
+
+  <script>
+    // Configuración del stock inicial
+    let stockGorras = 5;
+
+    const elementoStock = document.getElementById('stock-disponible');
+    const botonPago = document.getElementById('btn-confirmar');
+    const toast = document.getElementById('toast');
+
+    function actualizarEstadoProducto() {
+      if (stockGorras > 0) {
+        elementoStock.textContent = `Disponible: ${stockGorras} gorras`;
+        elementoStock.classList.remove('agotado');
+        botonPago.disabled = false;
+        botonPago.textContent = 'Confirmar pago';
+      } else {
+        elementoStock.textContent = 'Producto Agotado';
+        elementoStock.classList.add('agotado');
+        botonPago.disabled = true;
+        botonPago.textContent = 'Agotado';
+      }
+    }
+
+    function procesarCompra() {
+      if (stockGorras <= 0) return;
+
+      // Descontar una unidad
+      stockGorras--;
+
+      // Actualizar interfaz
+      actualizarEstadoProducto();
+
+      // Mostrar toast de confirmación
+      toast.textContent = '✓ Compra realizada con éxito';
+      toast.classList.add('show');
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    // Inicializar vista al cargar
+    actualizarEstadoProducto();
+  </script>
+
+</body>
+</html>
